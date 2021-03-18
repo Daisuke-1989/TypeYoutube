@@ -3,7 +3,8 @@ import { Options, NormalizedOptions } from 'ky';
 import camelcaseKeys from 'camelcase-keys';
 
 export const DEFAULT_API_OPTIONS: Options = {
-  prefixUrl: 'https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&q=citypop&maxResults=3&key=AIzaSyA2JcF0QsNhE_qelXSq0dTz5s25HI42qwg',
+  prefixUrl:
+    'https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&q=citypop&maxResults=3&key=SET_YOUR_API',
   timeout: 7000,
   retry: 2,
   hooks: {
