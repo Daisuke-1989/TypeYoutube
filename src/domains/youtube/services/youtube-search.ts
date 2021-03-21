@@ -9,15 +9,6 @@ const YoutubeSearch = async (): Promise<Video[]> => {
   );
   // const videos = (await response.json()) as unknown[];
   console.log(videos);
-  const videoData: Video = {
-    etag: '',
-    videoId: '',
-    title: '',
-    description: '',
-    thumbnails: '',
-    width: 0,
-    height: 0,
-  };
 
   if (!isData(videos.data)) {
     throw Error('API type error');
@@ -25,17 +16,28 @@ const YoutubeSearch = async (): Promise<Video[]> => {
   const yData: Data = videos.data;
   console.log(yData);
 
-  const videosData: Video[] = yData.items.map((movie: item) => {
-    videoData.etag = movie.etag;
-    videoData.videoId = movie.id.videoId;
-    videoData.title = movie.snippet.title;
-    videoData.description = movie.snippet.description;
-    videoData.thumbnails = movie.snippet.thumbnails.medium.url;
-    videoData.width = movie.snippet.thumbnails.medium.width;
-    videoData.height = movie.snippet.thumbnails.medium.height;
+  const videosData: Video[] = yData.items.map(
+    (movie: item): Video => {
+      const videoData: Video = {
+        etag: '',
+        videoId: '',
+        title: '',
+        description: '',
+        thumbnails: '',
+        width: 0,
+        height: 0,
+      };
+      videoData.etag = movie.etag;
+      videoData.videoId = movie.id.videoId;
+      videoData.title = movie.snippet.title;
+      videoData.description = movie.snippet.description;
+      videoData.thumbnails = movie.snippet.thumbnails.medium.url;
+      videoData.width = movie.snippet.thumbnails.medium.width;
+      videoData.height = movie.snippet.thumbnails.medium.height;
 
-    return videoData;
-  });
+      return videoData;
+    },
+  );
 
   return videosData;
 };
