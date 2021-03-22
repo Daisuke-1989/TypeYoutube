@@ -1,44 +1,29 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 
-import { Video } from 'domains/youtube';
+import { Video, YoutubeSearch } from 'domains/youtube';
+import VideoList from 'components/organisms/VideoList';
 
 type Props = {
-  You: string;
-  videos: Video[];
-  isLoading?: boolean;
+  confirmedInput: string;
 };
 
-const Youtube: FC<Props> = ({
-  You = 'You',
-  videos = [],
-  isLoading = false,
-}) => {
-  const title = `${You}Tube`;
-  const videoDiv = videos.map((video: Video) => {
-    const url = `https://www.youtube.com/embed/${video.videoId}`;
+const Youtube: FC<Props> = ({ confirmedInput = '' }) => {
+  const [videos, setVideos] = useState<Video[]>([]);
+  useEffect(() => {
+    const load = async (): Promise<void> => {
+      try {
+        const videosData: Video[] = await YoutubeSearch(confirmedInput);
+        setVideos(videosData);
+      } catch (err) {
+        throw new Error(`organization '${confirmedInput}' not exists`);
+      } finally {
+        console.log('finish');
+      }
+    };
+    void load();
+  }, [confirmedInput]);
 
-    return (
-      <div style={{ margin: '20px', textAlign: 'center' }}>
-        <iframe
-          id={video.videoId}
-          title="ytplayer"
-          width={video.width}
-          height={video.height}
-          src={url}
-          frameBorder="0"
-        />
-      </div>
-    );
-  });
-  console.log(videos);
-  console.log(isLoading);
-
-  return (
-    <div>
-      <p>{title}</p>
-      {videoDiv === null ? <p>now loading...</p> : videoDiv.map((item) => item)}
-    </div>
-  );
+  return <VideoList {...{ videos }} />;
 };
 
 export default Youtube;
